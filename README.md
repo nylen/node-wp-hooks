@@ -1,7 +1,7 @@
-# wphooks
+# @nylen/wp-hooks
 
-[![Build Status](https://img.shields.io/travis/nylen/wphooks/master.svg)](https://travis-ci.org/nylen/wphooks)
-[![Coverage](https://img.shields.io/coveralls/nylen/wphooks/master.svg)](https://coveralls.io/github/nylen/wphooks)
+[![Build Status](https://img.shields.io/travis/nylen/node-wp-hooks/master.svg)](https://travis-ci.org/nylen/node-wp-hooks)
+[![Coverage](https://img.shields.io/coveralls/nylen/node-wp-hooks/master.svg)](https://coveralls.io/github/nylen/node-wp-hooks)
 
 **WordPress-style hooks** (_actions_ and _filters_) for Node.js.
 
@@ -15,7 +15,7 @@ https://developer.wordpress.org/plugins/hooks/
 ## Usage
 
 ```js
-const WPHooks = require( 'wphooks' );
+const WPHooks = require( '@nylen/wp-hooks' );
 const hooks = new WPHooks();
 ```
 

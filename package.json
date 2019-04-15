@@ -1,4 +1,13 @@
 {
+  "name": "@nylen/wp-hooks",
+  "description": "WordPress actions and filters in JS",
+  "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nylen/node-wp-hooks"
+  },
+  "author": "WordPress",
+  "license": "GPL-2.0+",
   "main": "src/index.js",
   "dependencies": {},
   "devDependencies": {
