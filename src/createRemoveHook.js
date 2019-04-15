@@ -7,7 +7,7 @@
  *
  * @return {Function}            Function that removes hooks.
  */
-function createRemoveHook( hooks, removeAll ) {
+module.exports = function createRemoveHook( hooks, removeAll ) {
 	/**
 	 * Removes the specified callback (or all callbacks) from the hook with a
 	 * given name.
@@ -61,6 +61,4 @@ function createRemoveHook( hooks, removeAll ) {
 
 		return handlersRemoved;
 	};
-}
-
-export default createRemoveHook;
+};

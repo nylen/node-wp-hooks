@@ -5,7 +5,7 @@
  *
  * @return {Function}       Function that adds a new hook.
  */
-function createAddHook( hooks ) {
+module.exports = function createAddHook( hooks ) {
 	/**
 	 * Adds the hook to the appropriate hooks container.
 	 *
@@ -66,6 +66,4 @@ function createAddHook( hooks ) {
 			};
 		}
 	};
-}
-
-export default createAddHook;
+};

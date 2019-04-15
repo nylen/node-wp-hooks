@@ -7,7 +7,7 @@
  * @return {Function}       Function that returns whether a hook is currently
  *                          being executed.
  */
-function createDoingHook( hooks ) {
+module.exports = function createDoingHook( hooks ) {
 	/**
 	 * Returns whether a hook is currently being executed.
 	 *
@@ -27,6 +27,4 @@ function createDoingHook( hooks ) {
 			? hookName === hooks.__current[0].name
 			: false;
 	};
-}
-
-export default createDoingHook;
+};

@@ -7,7 +7,7 @@
  *
  * @return {Function}                Function that returns the current hook.
  */
-function createCurrentHook( hooks, returnFirstArg ) {
+module.exports = function createCurrentHook( hooks, returnFirstArg ) {
 	/**
 	 * Returns the name of the currently running hook, or `null` if no hook of
 	 * the given type is currently running.
@@ -22,6 +22,4 @@ function createCurrentHook( hooks, returnFirstArg ) {
 
 		return hooks.__current[ hooks.__current.length - 1 ].name;
 	};
-}
-
-export default createCurrentHook;
+};

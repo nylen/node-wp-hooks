@@ -9,7 +9,7 @@
  *
  * @return {Function}                Function that runs hook callbacks.
  */
-function createRunHook( hooks, returnFirstArg ) {
+module.exports = function createRunHook( hooks, returnFirstArg ) {
 	/**
 	 * Runs all callbacks for the specified hook.
 	 *
@@ -70,6 +70,4 @@ function createRunHook( hooks, returnFirstArg ) {
 			return maybeReturnValue;
 		}
 	};
-}
-
-export default createRunHook;
+};

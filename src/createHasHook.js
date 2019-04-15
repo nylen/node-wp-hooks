@@ -7,7 +7,7 @@
  * @return {Function}       Function that returns whether any handlers are
  *                          attached to a particular hook.
  */
-function createHasHook( hooks ) {
+module.exports = function createHasHook( hooks ) {
 	/**
 	 * Returns how many handlers are attached for the given hook.
 	 *
@@ -21,6 +21,4 @@ function createHasHook( hooks ) {
 			? hooks[ hookName ].handlers.length
 			: 0;
 	};
-}
-
-export default createHasHook;
+};

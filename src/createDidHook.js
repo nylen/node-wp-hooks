@@ -6,7 +6,7 @@
  *
  * @return {Function}       Function that returns a hook's call count.
  */
-function createDidHook( hooks ) {
+module.exports = function createDidHook( hooks ) {
 	/**
 	 * Returns the number of times an action has been fired.
 	 *
@@ -19,6 +19,4 @@ function createDidHook( hooks ) {
 			? hooks[ hookName ].runs
 			: 0;
 	};
-}
-
-export default createDidHook;
+};

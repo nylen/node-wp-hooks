@@ -1,10 +1,9 @@
-/* eslint-disable no-console */
+const WPHooks = require( '..' );
 
-/**
- * Internal dependencies
- */
-import HOOKS from '../hooks';
-import {
+const h = new WPHooks();
+
+// TODO call h.methodName() instead
+const {
 	addAction,
 	addFilter,
 	removeAction,
@@ -21,7 +20,7 @@ import {
 	doingFilter,
 	didAction,
 	didFilter,
-} from '../';
+} = h;
 
 function filter_a( str ) {
 	return str + 'a';
@@ -67,9 +66,9 @@ const consoleErrorOriginal = console.error;
 beforeEach( () => {
 	window.actionValue = '';
 	// Reset state in between tests (clear all callbacks, `didAction` counts,
-	// etc.)  Just reseting HOOKS.actions and HOOKS.filters is not enough
+	// etc.)  Just resetting _hooks.actions and _hooks.filters is not enough
 	// because the internal functions have references to the original objects.
-	[ HOOKS.actions, HOOKS.filters ].forEach( hooks => {
+	[ h._hooks.actions, h._hooks.filters ].forEach( hooks => {
 		for ( const k in hooks ) {
 			delete hooks[ k ];
 		}
