@@ -3,10 +3,11 @@
 [![Build Status](https://img.shields.io/travis/nylen/wphooks/master.svg)](https://travis-ci.org/nylen/wphooks)
 [![Coverage](https://img.shields.io/coveralls/nylen/wphooks/master.svg)](https://coveralls.io/github/nylen/wphooks)
 
-**WordPress-style hooks** (_actions_ and _filters_) for Node.js.  When combined
-with a mechanism for plugin registration and loading (outside the scope of this
-library), this is a simple, effective pattern that allows modifying values or
-executing other code at key parts in your app.
+**WordPress-style hooks** (_actions_ and _filters_) for Node.js.
+
+When combined with a mechanism for plugin registration and loading (outside the
+scope of this library), this is a simple, effective pattern that allows
+modifying values or executing other code at key parts in your app.
 
 More information about actions and filters as they are used in WordPress:
 https://developer.wordpress.org/plugins/hooks/
