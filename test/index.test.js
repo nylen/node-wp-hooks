@@ -130,13 +130,13 @@ test( 'run a filter with promises', async () => {
 
 	expect( value ).toEqual( [ [ '0riginalvalue', 'hook1' ], 'hook2' ] );
 	expect( log ).toEqual( [
-		"hook1 wait",
-		"hook2 wait",
-		"original fulfill",
-		[ "hook1 sees", "0riginalvalue" ],
-		[ "hook1 resolve", [ "0riginalvalue", "hook1" ] ],
-		[ "hook2 sees", [ "0riginalvalue", "hook1" ] ],
-		[ "hook2 resolve", [ [ "0riginalvalue", "hook1" ], "hook2" ] ],
+		'hook1 wait',
+		'hook2 wait',
+		'original fulfill',
+		[ 'hook1 sees', '0riginalvalue' ],
+		[ 'hook1 resolve', [ '0riginalvalue', 'hook1' ] ],
+		[ 'hook2 sees', [ '0riginalvalue', 'hook1' ] ],
+		[ 'hook2 resolve', [ [ '0riginalvalue', 'hook1' ], 'hook2' ] ],
 	] );
 } );
 
@@ -192,13 +192,89 @@ test( 'run a filter with await/async (full example)', async () => {
 
 	expect( value ).toEqual( [ [ '0riginalvalue', 'hook1' ], 'hook2' ] );
 	expect( log ).toEqual( [
-		"hook1 wait",
-		"hook2 wait",
-		"original fulfill",
-		[ "hook1 sees", "0riginalvalue" ],
-		[ "hook1 resolve", [ "0riginalvalue", "hook1" ] ],
-		[ "hook2 sees", [ "0riginalvalue", "hook1" ] ],
-		[ "hook2 resolve", [ [ "0riginalvalue", "hook1" ], "hook2" ] ],
+		'hook1 wait',
+		'hook2 wait',
+		'original fulfill',
+		[ 'hook1 sees', '0riginalvalue' ],
+		[ 'hook1 resolve', [ '0riginalvalue', 'hook1' ] ],
+		[ 'hook2 sees', [ '0riginalvalue', 'hook1' ] ],
+		[ 'hook2 resolve', [ [ '0riginalvalue', 'hook1' ], 'hook2' ] ],
+	] );
+} );
+
+test( 'run a filter with await/async (missing await 1)', async () => {
+	const log = [];
+
+	addFilter( 'promise', p => {
+		log.push( 'hook1 start' );
+		const value0 = p.toString();
+		log.push( [ 'hook1 sees', value0 ] );
+		const value1 = [ value0, 'hook1' ];
+		log.push( [ 'hook1 resolve', value1 ] );
+		return value1;
+	} );
+
+	addFilter( 'promise', async p => {
+		log.push( 'hook2 wait' );
+		const value1 = await p;
+		log.push( [ 'hook2 sees', value1 ] );
+		const value2 = [ value1, 'hook2' ];
+		log.push( [ 'hook2 resolve', value2 ] );
+		return value2;
+	} );
+
+	const value = await applyFilters( 'promise', new Promise( resolve => {
+		setTimeout( () => {
+			log.push( 'original fulfill' );
+			resolve( '0riginalvalue' );
+		} );
+	} ) );
+
+	expect( value ).toEqual( [ [ '[object Promise]', 'hook1' ], 'hook2' ] );
+	expect( log ).toEqual( [
+		'hook1 start',
+		[ 'hook1 sees', '[object Promise]' ],
+		[ 'hook1 resolve', [ '[object Promise]', 'hook1' ] ],
+		'hook2 wait',
+		[ 'hook2 sees', [ '[object Promise]', 'hook1' ] ],
+		[ 'hook2 resolve', [ [ '[object Promise]', 'hook1' ], 'hook2' ] ],
+	] );
+} );
+
+test( 'run a filter with await/async (missing await 2)', async () => {
+	const log = [];
+
+	addFilter( 'promise', async p => {
+		log.push( 'hook1 wait' );
+		const value0 = await p;
+		log.push( [ 'hook1 sees', value0 ] );
+		const value1 = [ value0, 'hook1' ];
+		log.push( [ 'hook1 resolve', value1 ] );
+		return value1;
+	} );
+
+	addFilter( 'promise', p => {
+		log.push( 'hook2 start' );
+		const value1 = p.toString();
+		log.push( [ 'hook2 sees', value1 ] );
+		const value2 = [ value1, 'hook2' ];
+		log.push( [ 'hook2 resolve', value2 ] );
+		return value2;
+	} );
+
+	const value = await applyFilters( 'promise', new Promise( resolve => {
+		setTimeout( () => {
+			log.push( 'original fulfill' );
+			resolve( '0riginalvalue' );
+		} );
+	} ) );
+
+	expect( value ).toEqual( [ '[object Promise]', 'hook2' ] );
+	expect( log ).toEqual( [
+		'hook1 wait',
+		'hook2 start',
+		[ 'hook2 sees', '[object Promise]' ],
+		[ 'hook2 resolve', [ '[object Promise]', 'hook2' ] ],
 	] );
 } );
 

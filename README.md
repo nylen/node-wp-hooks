@@ -63,8 +63,8 @@ follow a couple of simple rules, then the final result from `applyFilters` will
 be a promise that resolves or fails when all of its attached functions have
 finished processing.
 
-For hooks that may require asynchronous behavior, the app needs to start the
-filter chain with a `Promise` object:
+For hooks that may require asynchronous behavior, the app can start the filter
+chain normally:
 
 ```js
 const finalValue = await applyFilters(
@@ -74,7 +74,8 @@ const finalValue = await applyFilters(
 ```
 
 Then, individual filters can be written as `async` functions, as long as they
-accept a promise as an argument and `await` it at some point:
+adhere to a simple convention:  **Accept a `Promise` as an argument and `await`
+it before returning.**
 
 ```js
 addFilter( 'my_async_code_path', async p => {
@@ -83,4 +84,9 @@ addFilter( 'my_async_code_path', async p => {
 } );
 ```
 
-See `index.test.js` for more examples.
+See `index.test.js` for more examples and information.
+
+Future **major versions** of this library may change the behavior around
+asynchronous computations.  The current behavior works, but requires adhering
+to a non-obvious convention and can be difficult to understand and use
+effectively.
