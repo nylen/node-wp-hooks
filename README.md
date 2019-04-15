@@ -66,7 +66,9 @@ be a promise that resolves or fails when all of its attached functions have
 finished processing.
 
 For hooks that may require asynchronous behavior, the app must use a **filter**
-rather than an **action**.  Then the app can start the filter chain normally:
+rather than an **action**.  Then the app can start the filter chain normally,
+and just `await` the final result, which will be a `Promise` returned from the
+last function in the filter chain:
 
 ```js
 const finalValue = await applyFilters(
