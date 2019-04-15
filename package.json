@@ -1,7 +1,7 @@
 {
   "name": "@nylen/wp-hooks",
   "description": "WordPress actions and filters in JS",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/nylen/node-wp-hooks"

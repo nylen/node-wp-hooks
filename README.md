@@ -52,10 +52,35 @@ In large apps, it is a good idea to enforce separation of different types of
 hooks by either prefixing `identifier` hook names with `namespace.identifier`,
 or (even better) using separate `hooks` objects for each part of the app.
 
-All filters and actions are **synchronous**.  If you need asynchronous
-behavior, you will need to use a filter, return a `Promise` **synchronously**
-from each filter callback, and wait for the final `Promise` to be fulfilled in
-your app.
+## Sync or Async?
 
-A future **major version** of this library may include first-class support for
-`Promise`s and `async`/`await`.  PRs towards this goal are welcome.
+All filters and actions are **synchronous** by default, and this library
+contains no special code for async callbacks or promises.
+
+However, because `async` functions just return `Promise` objects under the
+covers, you can easily pass a `Promise` through a chain of hooks.  If you
+follow a couple of simple rules, then the final result from `applyFilters` will
+be a promise that resolves or fails when all of its attached functions have
+finished processing.
+
+For hooks that may require asynchronous behavior, the app needs to start the
+filter chain with a `Promise` object:
+
+```js
+const finalValue = await applyFilters(
+  'my_async_code_path',
+  'defaultValue'
+);
+```
+
+Then, individual filters can be written as `async` functions, as long as they
+accept a promise as an argument and `await` it at some point:
+
+```js
+addFilter( 'my_async_code_path', async p => {
+  const value = await p;
+  return value + '/modified';
+} );
+```
+
+See `index.test.js` for more examples.

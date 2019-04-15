@@ -90,6 +90,118 @@ test( 'run a filter with no callbacks', () => {
 	expect( applyFilters( 'test.filter', 42 ) ).toEqual( 42 );
 } );
 
+test( 'run a filter with promises', async () => {
+	const log = [];
+
+	addFilter( 'promise', p => {
+		log.push( 'hook1 wait' );
+		return p.then( value0 => {
+			log.push( [ 'hook1 sees', value0 ] );
+			return new Promise( resolve => {
+				const value1 = [ value0, 'hook1' ];
+				setTimeout( () => {
+					log.push( [ 'hook1 resolve', value1 ] );
+					resolve( value1 );
+				}, 2 );
+			} );
+		} );
+	} );
+
+	addFilter( 'promise', p => {
+		log.push( 'hook2 wait' );
+		return p.then( value1 => {
+			log.push( [ 'hook2 sees', value1 ] );
+			return new Promise( resolve => {
+				const value2 = [ value1, 'hook2' ];
+				setTimeout( () => {
+					log.push( [ 'hook2 resolve', value2 ] );
+					resolve( value2 );
+				}, 8 );
+			} );
+		} );
+	} );
+
+	const value = await applyFilters( 'promise', new Promise( resolve => {
+		setTimeout( () => {
+			log.push( 'original fulfill' );
+			resolve( '0riginalvalue' );
+		}, 5 );
+	} ) );
+
+	expect( value ).toEqual( [ [ '0riginalvalue', 'hook1' ], 'hook2' ] );
+	expect( log ).toEqual( [
+		"hook1 wait",
+		"hook2 wait",
+		"original fulfill",
+		[ "hook1 sees", "0riginalvalue" ],
+		[ "hook1 resolve", [ "0riginalvalue", "hook1" ] ],
+		[ "hook2 sees", [ "0riginalvalue", "hook1" ] ],
+		[ "hook2 resolve", [ [ "0riginalvalue", "hook1" ], "hook2" ] ],
+	] );
+} );
+
+test( 'run a filter with await/async (readme example)', async () => {
+	addFilter( 'my_async_code_path', async p => {
+		// This may or may not be a Promise, depending on whether a previous
+		// filter has registered an async operation or whether the original
+		// call was passed a Promise.  It works fine either way, but all hooks
+		// that may be part of a chain involving async computations need to
+		// adhere to this convention.
+		const value = await p;
+		return value + '/modified';
+	} );
+
+	const finalValue = await applyFilters(
+		'my_async_code_path',
+		'defaultValue'
+		// This could just as easily be:
+		// new Promise( resolve => resolve( 'defaultValue' ) )
+		// but `await` on a non-Promise value works fine too.
+	);
+
+	expect( finalValue ).toEqual( 'defaultValue/modified' );
+} );
+
+test( 'run a filter with await/async (full example)', async () => {
+	const log = [];
+
+	addFilter( 'promise', async p => {
+		log.push( 'hook1 wait' );
+		const value0 = await p;
+		log.push( [ 'hook1 sees', value0 ] );
+		const value1 = [ value0, 'hook1' ];
+		log.push( [ 'hook1 resolve', value1 ] );
+		return value1;
+	} );
+
+	addFilter( 'promise', async p => {
+		log.push( 'hook2 wait' );
+		const value1 = await p;
+		log.push( [ 'hook2 sees', value1 ] );
+		const value2 = [ value1, 'hook2' ];
+		log.push( [ 'hook2 resolve', value2 ] );
+		return value2;
+	} );
+
+	const value = await applyFilters( 'promise', new Promise( resolve => {
+		setTimeout( () => {
+			log.push( 'original fulfill' );
+			resolve( '0riginalvalue' );
+		} );
+	} ) );
+
+	expect( value ).toEqual( [ [ '0riginalvalue', 'hook1' ], 'hook2' ] );
+	expect( log ).toEqual( [
+		"hook1 wait",
+		"hook2 wait",
+		"original fulfill",
+		[ "hook1 sees", "0riginalvalue" ],
+		[ "hook1 resolve", [ "0riginalvalue", "hook1" ] ],
+		[ "hook2 sees", [ "0riginalvalue", "hook1" ] ],
+		[ "hook2 resolve", [ [ "0riginalvalue", "hook1" ], "hook2" ] ],
+	] );
+} );
+
 test( 'add and remove a filter', () => {
 	addFilter( 'test.filter', filter_a );
 	expect( removeAllFilters( 'test.filter' ) ).toEqual( 1 );
