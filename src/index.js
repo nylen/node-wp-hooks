@@ -8,7 +8,7 @@ const createDidHook     = require( './createDidHook' );
 
 module.exports = function WPHooks() {
 	// Ensure this function is used like a constructor.
-	if ( ! this instanceof WPHooks ) {
+	if ( ! ( this instanceof WPHooks ) ) {
 		return new WPHooks();
 	}
 

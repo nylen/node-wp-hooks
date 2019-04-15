@@ -80,6 +80,12 @@ afterEach( () => {
 	console.error = consoleErrorOriginal;
 } );
 
+test( 'create object without new', () => {
+	const h2 = WPHooks();
+	expect( h2 ).toHaveProperty( 'applyFilters' );
+	expect( typeof h2.applyFilters ).toBe( 'function' );
+} );
+
 test( 'run a filter with no callbacks', () => {
 	expect( applyFilters( 'test.filter', 42 ) ).toEqual( 42 );
 } );
