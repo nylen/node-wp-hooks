@@ -5,6 +5,11 @@
 
 **WordPress-style hooks** (_actions_ and _filters_) for Node.js.
 
+Recent (5.x) versions of WordPress also include a JavaScript actions and
+filters library.  **It is not exactly the same as this library** - this
+library shares history with the WordPress version, but it is simpler and is
+mainly intended for usage in Node.js server programs.
+
 When combined with a mechanism for plugin registration and loading (outside the
 scope of this library), this is a simple, effective pattern that allows
 modifying values or executing other code at key parts in your app.
