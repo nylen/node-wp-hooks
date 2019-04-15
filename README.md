@@ -68,8 +68,8 @@ follow a couple of simple rules, then the final result from `applyFilters` will
 be a promise that resolves or fails when all of its attached functions have
 finished processing.
 
-For hooks that may require asynchronous behavior, the app can start the filter
-chain normally:
+For hooks that may require asynchronous behavior, the app must use a **filter**
+rather than an **action**.  Then the app can start the filter chain normally:
 
 ```js
 const finalValue = await applyFilters(
@@ -88,6 +88,10 @@ addFilter( 'my_async_code_path', async p => {
   return value + '/modified';
 } );
 ```
+
+This allows for any function in the chain of filters to return a `Promise`,
+which other functions will wait for before doing their processing.  (It's fine
+to `await` a non-`Promise` value too.)
 
 See `index.test.js` for more examples and information.
 
